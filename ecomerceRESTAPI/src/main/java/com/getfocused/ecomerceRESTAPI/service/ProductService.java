@@ -1,6 +1,8 @@
 package com.getfocused.ecomerceRESTAPI.service;
 
 import com.getfocused.ecomerceRESTAPI.model.Product;
+import com.getfocused.ecomerceRESTAPI.repository.ProductRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
@@ -11,43 +13,26 @@ import java.util.List;
 @Service
 public class ProductService {
 
-    List<Product> products =  new ArrayList<>(Arrays.asList(
-            new Product(101,"Iphone",150),
-            new Product(102,"Wifi",340),
-            new Product(103,"Computer",560)
-            ));
+    @Autowired
+    ProductRepo productRepo;
 
     public List<Product> getProducts(){
-        return products;
+        return productRepo.findAll();
     }
 
     public Product getProductById(int id){
-        return products.stream()
-                .filter(p -> p.getProdid() == id)
-                .findFirst().orElse(null);
+        return productRepo.findById(id).orElse(new Product(0,"The product is not found", 0));
     }
 
     public void addProduct(Product product){
-        products.add(product);
+        productRepo.save(product);
     }
 
     public void updateProduct(Product product){
-        int index = 0;
-        for(int i = 0; i<products.size(); i++){
-            if(products.get(i).getProdid() == product.getProdid()){
-                index = i;
-            }
-        }
-        products.set(index, product);
+        productRepo.save(product);
     }
 
     public void deleteProduct(int id){
-        int index = 0;
-        for(int i = 0; i<products.size(); i++){
-            if(products.get(i).getProdid() == id){
-                index = i;
-            }
-        }
-        products.remove(index);
+        productRepo.deleteById(id);
     }
 }
