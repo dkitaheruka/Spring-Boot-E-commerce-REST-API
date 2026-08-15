@@ -4,7 +4,9 @@ import com.getfocused.ecomerceRESTAPI.model.Product;
 import com.getfocused.ecomerceRESTAPI.repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,11 +23,14 @@ public class ProductService {
     }
 
     public Product getProductById(int id){
-        return productRepo.findById(id).orElse(new Product(0,"The product is not found", 0));
+        return productRepo.findById(id).orElse(null);
     }
 
-    public void addProduct(Product product){
-        productRepo.save(product);
+    public Product addProduct(Product product, MultipartFile imageFile) throws IOException {
+        product.setImageName(imageFile.getOriginalFilename());
+        product.setImageType(imageFile.getContentType());
+        product.setImageData(imageFile.getBytes());
+        return productRepo.save(product);
     }
 
     public void updateProduct(Product product){
