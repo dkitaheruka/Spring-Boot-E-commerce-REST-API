@@ -7,9 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -42,5 +39,9 @@ public class ProductService {
 
     public void deleProduct(int id) {
         productRepo.deleteById(id);
+    }
+
+    public List<Product> searchProduct(String keyword){
+        return productRepo.searchProduct(keyword);
     }
 }
