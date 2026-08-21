@@ -50,6 +50,9 @@ public class ProductController {
     @GetMapping("product/{productId}/image")
     public ResponseEntity<byte[]> getProductImageByProductId(@PathVariable int productId){
         Product product = productService.getProductById(productId);
+        if(product == null || product.getImageData() == null || product.getImageType() == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         byte[] imageFile = product.getImageData();
         return ResponseEntity.ok().contentType(MediaType.valueOf(product.getImageType())).body(imageFile);
     }

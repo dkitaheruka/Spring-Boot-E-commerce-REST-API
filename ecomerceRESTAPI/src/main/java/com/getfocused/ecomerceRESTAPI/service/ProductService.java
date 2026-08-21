@@ -31,6 +31,10 @@ public class ProductService {
     }
 
     public Product updateProduct(int id, Product product, MultipartFile imageFile) throws IOException {
+        if (!productRepo.existsById(id)) {
+            return null;
+        }
+        product.setId(id);
         product.setImageData(imageFile.getBytes());
         product.setImageName(imageFile.getOriginalFilename());
         product.setImageType(imageFile.getContentType());
